@@ -49,18 +49,14 @@ window.findNRooksSolution = function(n) {
   
   helper([]);
   
-  var coordinateSolution = permutations[0];
-  // //[0,0], [1,1]
-  // [0,0]
-  // [0,0];
+  let coordinateSolution = permutations[0];
+  //return permutations[0];
 
-  let literalSolution = [[0,0], [0,0]];
+  let resultBoard = new Board({n: n});
   for (let i = 0; i < coordinateSolution.length; i++) {
-    let coordinates = coordinateSolution[i];
-    literalSolution[coordinates[0]][coordinates[1]] = 1;
+    resultBoard.togglePiece(coordinateSolution[i][0], coordinateSolution[i][1]);
   }
-  //console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return literalSolution;
+  return resultBoard.rows();
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
