@@ -17,38 +17,51 @@
 
 window.findNRooksSolution = function(n) {
 
-  var permutations = [];
+  let startTime = (new Date).getTime();
+  let permutations = [];
 
-  var helper = function(path) {
+  let helper = function(path) {
     if (path.length === n) {
-      var board = new Board({n:n});
-      for (let i = 0; i < path.length; i++) {
-        board.togglePiece(path[i][0], path[i][1]);
-      }
-      if (board.hasAnyRooksConflicts() === false) {
+      // let board = new Board({n:n});
+      // for (let i = 0; i < path.length; i++) {
+      //   board.togglePiece(path[i][0], path[i][1]);
+      // }
+      // if (board.hasAnyRooksConflicts() === false) {
         permutations.push(path);
-      }
+      //}
     } else {
-      var nextStep = [];
-      for (let i = 0; i < n; i++) {
-        for (let j = 0; j < n; j++) {
-          if (path.length === 0) {
-            nextStep.push([i,j]);
-          } else if (i > path[path.length-1][0]) {
+      let nextStep = [];
+      if (path.length === 0) {
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
             nextStep.push([i,j]);
           }
         }
+      } else {
+        for (let i = (path[path.length-1][0] + 1); i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            let shouldPush = true;
+            for (let k = 0; k < path.length; k++) {
+              if (j === path[path.length - 1 - k][1]) {
+                shouldPush = false;
+                break;
+              }
+            }
+            if (shouldPush) {
+              nextStep.push([i,j]);
+            }
+          }
+        }
       }
-      for (var i = 0; i < nextStep.length; i++) {
-        var copy = path.slice();
-        copy.push(nextStep[i]);
-        helper(copy);
-      }
+      let copy = path.slice();
+      copy.push(nextStep[0]);
+      helper(copy);
     }
   }
 
   helper([]);
 
+  console.log(permutations);
   let coordinateSolution = permutations[0];
   //return permutations[0];
 
@@ -56,6 +69,8 @@ window.findNRooksSolution = function(n) {
   for (let i = 0; i < coordinateSolution.length; i++) {
     resultBoard.togglePiece(coordinateSolution[i][0], coordinateSolution[i][1]);
   }
+  let endTime = (new Date).getTime();
+  console.log('Runtime was ' + (endTime - startTime));
   return resultBoard.rows();
 };
 
@@ -116,65 +131,17 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var permutations = [];
-
-  var helper = function(path) {
-    if (path.length === n) {
-      var board = new Board({n:n});
-      for (let i = 0; i < path.length; i++) {
-        board.togglePiece(path[i][0], path[i][1]);
-      }
-      if (board.hasAnyQueensConflicts() === false) {
-        permutations.push(path);
-      }
-    } else {
-      var nextStep = [];
-      for (let i = 0; i < n; i++) {
-        for (let j = 0; j < n; j++) {
-          if (path.length === 0) {
-            nextStep.push([i,j]);
-          } else if (i > path[path.length-1][0]) {
-            nextStep.push([i,j]);
-          }
-        }
-      }
-      for (var i = 0; i < nextStep.length; i++) {
-        var copy = path.slice();
-        copy.push(nextStep[i]);
-        helper(copy);
-      }
-    }
-  }
-
-  helper([]);
-
-  if (permutations.length === 0) {
-    return (new Board({n:n})).rows();
-  }
-  let coordinateSolution = permutations[0];
-  //return permutations[0];
-
-  let resultBoard = new Board({n: n});
-  for (let i = 0; i < coordinateSolution.length; i++) {
-    resultBoard.togglePiece(coordinateSolution[i][0], coordinateSolution[i][1]);
-  }
-  return resultBoard.rows();
-};
-
-// return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
-window.countNQueensSolutions = function(n) {
   let startTime = (new Date).getTime();
   let permutations = [];
 
   let helper = function(path) {
     if (path.length === n) {
-      let board = new Board({n:n});
-      for (let i = 0; i < path.length; i++) {
-        board.togglePiece(path[i][0], path[i][1]);
-      }
-      if (board.hasAnyQueensConflicts() === false) {
-        permutations.push(path);
-      }
+      // let board = new Board({n:n});
+      // for (let i = 0; i < path.length; i++) {
+      //   board.togglePiece(path[i][0], path[i][1]);
+      // }
+      // if (board.hasAnyQueensConflicts() === false) {
+      permutations.push(path);
     } else {
       let nextStep = [];
       if (path.length === 0) {
@@ -186,11 +153,78 @@ window.countNQueensSolutions = function(n) {
       } else {
         for (let i = (path[path.length-1][0] + 1); i < n; i++) {
           for (let j = 0; j < n; j++) {
-            if (path.length === 0) {
+            let shouldPush = true;
+            for (let k = 0; k < path.length; k++) {
+              if (j === path[path.length-1-k][1] ||
+                 (i - path[path.length-1-k][0] === j - path[path.length-1-k][1]) ||
+                 (i - path[path.length-1-k][0] === path[path.length-1-k][1] - j)) {
+                shouldPush = false;
+                break;
+              }
+            }
+            if (shouldPush === true) {
               nextStep.push([i,j]);
-            } else if (j !== path[path.length-1][1] &&
-                      (i - path[path.length-1][0] !== j - path[path.length-1][1]) &&
-                      (i - path[path.length-1][0] !== path[path.length-1][1] - j)) {
+            }
+          }
+        }
+      }
+      for (let i = 0; i < nextStep.length; i++) {
+        let copy = path.slice();
+        copy.push(nextStep[i]);
+        helper(copy);
+      }
+    }
+  }
+
+  helper([]);
+  if (permutations.length === 0) {
+    return (new Board({n:n})).rows();
+  }
+  let coordinateSolution = permutations[0];
+
+  let resultBoard = new Board({n: n});
+  for (let i = 0; i < coordinateSolution.length; i++) {
+    resultBoard.togglePiece(coordinateSolution[i][0], coordinateSolution[i][1]);
+  }
+  let endTime = (new Date).getTime();
+  console.log('Runtime was ' + (endTime - startTime));
+  return resultBoard.rows();
+};
+
+// return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
+window.countNQueensSolutions = function(n) {
+  let startTime = (new Date).getTime();
+  let permutations = [];
+
+  let helper = function(path) {
+    if (path.length === n) {
+      // let board = new Board({n:n});
+      // for (let i = 0; i < path.length; i++) {
+      //   board.togglePiece(path[i][0], path[i][1]);
+      // }
+      // if (board.hasAnyQueensConflicts() === false) {
+      permutations.push(path);
+    } else {
+      let nextStep = [];
+      if (path.length === 0) {
+        for (let i = 0; i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            nextStep.push([i,j]);
+          }
+        }
+      } else {
+        for (let i = (path[path.length-1][0] + 1); i < n; i++) {
+          for (let j = 0; j < n; j++) {
+            let shouldPush = true;
+            for (let k = 0; k < path.length; k++) {
+              if (j === path[path.length-1-k][1] ||
+                 (i - path[path.length-1-k][0] === j - path[path.length-1-k][1]) ||
+                 (i - path[path.length-1-k][0] === path[path.length-1-k][1] - j)) {
+                shouldPush = false;
+                break;
+              }
+            }
+            if (shouldPush === true) {
               nextStep.push([i,j]);
             }
           }
