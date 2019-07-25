@@ -66,13 +66,13 @@ window.countNRooksSolutions = function(n) {
 
   let helper = function(path) {
     if (path.length === n) {
-      let board = new Board({n:n});
-      for (let i = 0; i < path.length; i++) {
-        board.togglePiece(path[i][0], path[i][1]);
-      }
-      if (board.hasAnyRooksConflicts() === false) {
+      // let board = new Board({n:n});
+      // for (let i = 0; i < path.length; i++) {
+      //   board.togglePiece(path[i][0], path[i][1]);
+      // }
+      // if (board.hasAnyRooksConflicts() === false) {
         permutations.push(path);
-      }
+      //}
     } else {
       let nextStep = [];
       if (path.length === 0) {
@@ -84,9 +84,14 @@ window.countNRooksSolutions = function(n) {
       } else {
         for (let i = (path[path.length-1][0] + 1); i < n; i++) {
           for (let j = 0; j < n; j++) {
-            if (path.length === 0) {
-              nextStep.push([i,j]);
-            } else if (j !== path[path.length-1][1]) {
+            let shouldPush = true;
+            for (let k = 0; k < path.length; k++) {
+              if (j === path[path.length - 1 - k][1]) {
+                shouldPush = false;
+                break;
+              }
+            }
+            if (shouldPush) {
               nextStep.push([i,j]);
             }
           }
