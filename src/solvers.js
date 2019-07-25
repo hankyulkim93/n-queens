@@ -16,15 +16,87 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  var permutations = [];
+  
+  var helper = function(path) {
+    if (path.length === n) {
+      var board = new Board({n:n});
+      for (let i = 0; i < path.length; i++) {
+        board.togglePiece(path[i][0], path[i][1]);
+      }
+      if (board.hasAnyRooksConflicts() === false) {
+        permutations.push(path);
+      }
+    } else {
+      var nextStep = [];
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          if (path.length === 0) {
+            nextStep.push([i,j]);
+          } else if (i > path[path.length-1][0]) {
+            nextStep.push([i,j]);
+          }
+        }
+      }
+      for (var i = 0; i < nextStep.length; i++) {
+        var copy = path.slice();
+        copy.push(nextStep[i]);
+        helper(copy);
+      }
+    }
+  }
+  
+  helper([]);
+  
+  var coordinateSolution = permutations[0];
+  // //[0,0], [1,1]
+  // [0,0]
+  // [0,0];
+
+  let literalSolution = [[0,0], [0,0]];
+  for (let i = 0; i < coordinateSolution.length; i++) {
+    let coordinates = coordinateSolution[i];
+    literalSolution[coordinates[0]][coordinates[1]] = 1;
+  }
+  //console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  return literalSolution;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  var permutations = [];
+  
+  var helper = function(path) {
+    if (path.length === n) {
+      var board = new Board({n:n});
+      for (let i = 0; i < path.length; i++) {
+        board.togglePiece(path[i][0], path[i][1]);
+      }
+      if (board.hasAnyRooksConflicts() === false) {
+        permutations.push(path);
+      }
+    } else {
+      var nextStep = [];
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+          if (path.length === 0) {
+            nextStep.push([i,j]);
+          } else if (i > path[path.length-1][0]) {
+            nextStep.push([i,j]);
+          }
+        }
+      }
+      for (var i = 0; i < nextStep.length; i++) {
+        var copy = path.slice();
+        copy.push(nextStep[i]);
+        helper(copy);
+      }
+    }
+  }
+  
+  helper([]);
+  var solutionCount = permutations.length; //fixme
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
