@@ -22,13 +22,7 @@ window.findNRooksSolution = function(n) {
 
   let helper = function(path) {
     if (path.length === n) {
-      // let board = new Board({n:n});
-      // for (let i = 0; i < path.length; i++) {
-      //   board.togglePiece(path[i][0], path[i][1]);
-      // }
-      // if (board.hasAnyRooksConflicts() === false) {
         permutations.push(path);
-      //}
     } else {
       let nextStep = [];
       if (path.length === 0) {
@@ -63,7 +57,6 @@ window.findNRooksSolution = function(n) {
 
   console.log(permutations);
   let coordinateSolution = permutations[0];
-  //return permutations[0];
 
   let resultBoard = new Board({n: n});
   for (let i = 0; i < coordinateSolution.length; i++) {
@@ -81,12 +74,6 @@ window.countNRooksSolutions = function(n) {
 
   let helper = function(path) {
     if (path.length === n) {
-
-      // let board = new Board({n:n});
-      // for (let i = 0; i < path.length; i++) {
-      //   board.togglePiece(path[i][0], path[i][1]);
-      // }
-      // if (board.hasAnyRooksConflicts() === false) {
       permutations.push(path);
       let mirroredPath = [];
       if (n > 1 && n % 2 === 0) {
@@ -104,7 +91,6 @@ window.countNRooksSolutions = function(n) {
         }
       } else {
         let rowIndex = path[path.length - 1][0] + 1;
-        //for (let i = (path[path.length-1][0] + 1); i < path[path.length - 1][0] + 2; i++) {
           for (let j = 0; j < n; j++) {
             let shouldPush = true;
             for (let k = 0; k < path.length; k++) {
@@ -127,7 +113,7 @@ window.countNRooksSolutions = function(n) {
   }
   //debugger;
   helper([]);
-  let solutionCount = permutations.length; //fixme
+  let solutionCount = permutations.length;
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   let endTime = (new Date).getTime();
@@ -142,11 +128,6 @@ window.findNQueensSolution = function(n) {
 
   let helper = function(path) {
     if (path.length === n) {
-      // let board = new Board({n:n});
-      // for (let i = 0; i < path.length; i++) {
-      //   board.togglePiece(path[i][0], path[i][1]);
-      // }
-      // if (board.hasAnyQueensConflicts() === false) {
       permutations.push(path);
     } else {
       let nextStep = [];
@@ -157,7 +138,6 @@ window.findNQueensSolution = function(n) {
           }
         }
       } else {
-        //for (let i = (path[path.length-1][0] + 1); i < n; i++) {
           let rowIndex = path[path.length - 1][0] + 1;
           for (let j = 0; j < n; j++) {
             let shouldPush = true;
@@ -204,11 +184,6 @@ window.countNQueensSolutions = function(n) {
 
   let helper = function(path) {
     if (path.length === n) {
-      // let board = new Board({n:n});
-      // for (let i = 0; i < path.length; i++) {
-      //   board.togglePiece(path[i][0], path[i][1]);
-      // }
-      // if (board.hasAnyQueensConflicts() === false) {
       permutations.push(path);
       if (n > 1 && n % 2 === 0) {
         let mirroredPath = [];
@@ -251,7 +226,7 @@ window.countNQueensSolutions = function(n) {
   }
 
   helper([]);
-  let solutionCount = permutations.length; //fixme
+  let solutionCount = permutations.length;
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   let endTime = (new Date).getTime();
